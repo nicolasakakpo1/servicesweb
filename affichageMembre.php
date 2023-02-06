@@ -1,0 +1,90 @@
+
+<?php 
+	require("connection.php");
+    //session_start();
+		if (!empty($_SESSION["autoriser"]!="oui")) {
+			header("location:login.php");
+		}
+
+        @$idMembre=$_GET["idMembre"];
+        @$supp=$_GET["supp"];
+        if($supp=="oui"){
+          $req = $acces->prepare("DELETE FROM `membre` WHERE idMembre=? limit 1");
+          $req->execute(array($idMembre));  
+        }
+?>
+
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="img/favicon.png">
+
+    <title>StarLab</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="files/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="album.css" rel="stylesheet">
+    <link href="tshirt.css" rel="stylesheet">
+    <script defer src="https://use.fontawesome.com/releases/v5.0.9/js/all.js" integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/boxicons@2.1.4/dist/boxicons.js"></script>
+</head>
+
+<?php
+	require ("requetes.php");
+	$membre=afficherMembre();
+    $nbre=count($membre);
+?>
+<body>
+
+<br><br><br><?php echo "<h4 class='card-header' style='color:blue;position:fixed;border-radius:50%;'>$nbre</h4>" ?><br>
+<main role="main">
+        <div class="container" style="margin-left: 50px;">
+        <?php foreach($membre as $membre): ?>
+            
+             <div class="row justify-content-between">
+                <div class="col-6">
+                    <div class="card mb-4 box-shadow" style="width: 250px; margin-top:-10px; padding:5px;border-radius: 50%; border:green solid 2px; margin-left:270px">
+                        <img class="card-img-top" src="<?= substr($membre->imageMembre,0,100) ?>" alt="Card image cap" style="height:250px; border-radius: 50%;">
+                    </div>
+                </div>
+                <div class="col-6">
+                    
+                    <h3 class="jumbotron-heading" style="font-family: 'Times New Roman', Times, serif;"><?= substr($membre->nomMembre,0,20) ?></h3><h4 style="font-family: 'Times New Roman', Times, serif;"><?= substr($membre->prenomMembre,0,35) ?></h4>
+                    <h5 style="color: blue;" style="font-family: 'Times New Roman', Times, serif;"><strong><?= substr($membre->mailMembre,0,25) ?></strong></h4>
+                    <h5 style="font-family: 'Times New Roman', Times, serif;"><?= substr($membre->contactMembre,0,20) ?></h5>
+                    <h5 style="font-family: 'Times New Roman', Times, serif;"><?= substr($membre->adresseMembre,0,100) ?></h5>
+                    <p class="lead text-muted"><strong><?= substr($membre->specialiteMembre,0,250) ?></strong></p>
+                    <hr>
+                    <div class="form-group row mb-0">
+                         <div class=""> 
+                                <button type="submit" class="btn btn-primary" name="modifier"                    style="background-color:blue;border:none;">
+                                 <a href="updateMembre.php?idMembre=<?= $membre->idMembre ?>" style="color:white;"><box-icon name='sync' color='rgba(8,8,8,0.96)' ></box-icon></a>
+                              </button>    
+                              <button type="submit" class="btn btn-primary" name="supprimer" style="background-color:red;border:none;">
+                                <a href="?idMembre=<?=$membre->idMembre?>&supp=oui" style="color:white;" onClick="return confirm('Voulez-vous continuer?')"><box-icon name='message-x'></box-icon></a>
+                              </button>                 
+                         </div>
+                </div>
+                </div>
+            </div><br><br><h3>
+        <?php endforeach; ?>
+        </div>
+
+</main>
+<!-- Bootstrap core JavaScript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+
+<script src="popper.min.js"></script>
+<script src="bootstrap.min.js"></script>
+<script src="holder.min.js"></script>
+</body>
+</html>
+
